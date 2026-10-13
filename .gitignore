@@ -1,0 +1,21 @@
+# Java build output
+bin/
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+*.zip
+
+# IDE specific files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS specific files
+.DS_Store
+Thumbs.db
