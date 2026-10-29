@@ -228,3 +228,29 @@ Saldo hanya dapat diubah melalui validasi method setor() dan tarik().
 +-------------+---------------+---------------+--------------------+---------------+
 [SELESAI] Demonstrasi seluruh Access Modifier berhasil dijalankan dengan sempurna.
 ```
+
+---
+
+## 📚 Contoh Konsep Dasar OOP
+
+Selain tugas access modifier di `src/`, repo ini berisi contoh konsep dasar Java dalam folder terpisah. Tiap folder memiliki `README.md` (penjelasan, cara menjalankan, contoh keluaran) dan `src/` (kode yang dapat dikompilasi sendiri).
+
+| Folder | Konsep |
+| :--- | :--- |
+| [`01-class-dan-objek`](01-class-dan-objek/README.md) | Class, objek, instansiasi, referensi, `null` |
+| [`02-constructor`](02-constructor/README.md) | Constructor, overloading, `this(...)`, copy constructor |
+| [`03-enkapsulasi`](03-enkapsulasi/README.md) | Atribut `private`, getter/setter, validasi |
+| [`04-package`](04-package/README.md) | Package, `import`, nama lengkap, static import |
+| [`05-access-modifier`](05-access-modifier/README.md) | `private`, default, `protected`, `public` lintas package |
+| [`06-inheritance`](06-inheritance/README.md) | `extends`, `super`, override, pewarisan bertingkat |
+| [`07-polymorphism`](07-polymorphism/README.md) | Overloading, overriding, upcasting, downcasting |
+| [`08-abstraction`](08-abstraction/README.md) | Abstract class dan method abstract |
+| [`09-interface`](09-interface/README.md) | Interface, `default` dan `static` method, implementasi ganda |
+
+Cara menjalankan contoh dijelaskan di README tiap folder. Contoh tanpa package:
+
+```bash
+cd 06-inheritance
+javac -d bin src/*.java
+java -cp bin Main
+```
