@@ -12,6 +12,7 @@ Package mengelompokkan class terkait dan memberi ruang nama (*namespace*). Dua c
 ```
 04-package/
 ├── README.md
+├── PANDUAN-COMPILE.md            # cara compile, jalankan, JAR, dan daftar error
 └── src/id/rosyidalansorri/
     ├── gudang/Barang.java        # Barang versi gudang (stok)
     ├── toko/Barang.java          # Barang versi toko (harga), nama class sama
@@ -34,6 +35,8 @@ javac -d bin @sources.txt
 java -cp bin id.rosyidalansorri.app.Main
 ```
 Class yang berada dalam package dijalankan dengan nama lengkapnya.
+
+Penjelasan opsi `-d` dan `-cp`, compile bertahap, `-sourcepath`, pembuatan JAR, pemakaian package dari program lain, dan daftar error umum ada di [PANDUAN-COMPILE.md](PANDUAN-COMPILE.md).
 
 ## Contoh keluaran
 ```
