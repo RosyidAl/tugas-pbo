@@ -2,6 +2,83 @@
 
 Panduan ini melengkapi [README.md](README.md). Fokusnya cara mengompilasi, menjalankan, dan memakai ulang class yang berada di dalam package. Perintah diuji dengan JDK 25 di Linux. Perintah Windows mengikuti sintaks Command Prompt dan PowerShell tetapi tidak diuji di mesin ini.
 
+## 0. Apa itu folder `bin`?
+
+`bin` hanyalah nama folder untuk menyimpan **hasil compile**. Folder ini tidak ditulis oleh Anda dan bukan bagian dari Java. `javac` yang membuatnya ketika diberi opsi `-d bin`.
+
+### Mengapa perlu hasil compile?
+
+Berkas `.java` ditulis untuk dibaca manusia. JVM (program `java`) tidak bisa menjalankannya langsung. `javac` mengubahnya menjadi berkas `.class` berisi *bytecode*, dan hanya berkas `.class` yang dijalankan oleh `java`.
+
+```
+FormatRupiah.java  ──── javac ────►  FormatRupiah.class  ──── java ────►  tampil di layar
+(teks, dibaca manusia)               (biner, dibaca JVM)
+330 byte                             485 byte
+```
+
+Isi berkas `.class` adalah data biner. Empat byte pertamanya selalu `ca fe ba be`, tanda pengenal format class Java.
+
+### Sebelum dan sesudah compile
+
+Sebelum `javac` dijalankan, hanya ada `src`:
+
+```
+04-package/
+└── src/
+    └── id/rosyidalansorri/
+        ├── app/Main.java
+        ├── gudang/Barang.java
+        ├── toko/Barang.java
+        └── util/FormatRupiah.java
+```
+
+Setelah `javac -d bin $(find src -name "*.java")`, muncul folder `bin`, sedangkan `src` tidak berubah (tetap 4 berkas):
+
+```
+04-package/
+├── src/                                  ◄── tulisan Anda, tidak disentuh
+│   └── id/rosyidalansorri/ ... (4 berkas .java)
+└── bin/                                  ◄── baru, dibuat oleh javac
+    └── id/rosyidalansorri/
+        ├── app/Main.class
+        ├── gudang/Barang.class
+        ├── toko/Barang.class
+        └── util/FormatRupiah.class
+```
+
+Satu `.java` menjadi satu `.class`, dengan jalur folder yang sama persis di bawah `bin`.
+
+### Kata `bin` muncul tiga kali, artinya berbeda
+
+| Perintah | Arti `bin` di situ | Dibaca sebagai |
+| :--- | :--- | :--- |
+| `javac -d bin ...` | Folder **tujuan** tempat `.class` ditulis | "Taruh hasil compile di folder bin." |
+| `java -cp bin ...` | Folder tempat JVM **mencari** class saat program jalan | "Cari class di folder bin." |
+| `jar ... -C bin .` | Folder **sumber** isi arsip JAR | "Masuk ke folder bin, masukkan semua isinya." |
+
+Alurnya: `-d bin` menulis ke `bin`, lalu `-cp bin` membaca dari `bin`. Kalau dua nilai ini berbeda, program tidak ketemu class-nya.
+
+### Hal yang bisa dicoba
+
+Percobaan berikut dijalankan di mesin ini, hasilnya tertulis di samping.
+
+| Langkah | Hasil |
+| :--- | :--- |
+| Ubah teks `Rp` menjadi `IDR` di `FormatRupiah.java`, lalu langsung `java -cp bin ...` | Masih tampil `Rp1,250,000`. JVM membaca `.class` lama, bukan `.java`. |
+| Compile ulang dengan `javac -d bin ...`, lalu jalankan lagi | Tampil `IDR 1,250,000`. Setiap kali source diubah, compile ulang dulu. |
+| Hapus folder `bin`, lalu `java -cp bin ...` | `Error: Could not find or load main class ...`. Tidak ada yang rusak, `bin` tinggal dibuat lagi dengan `javac`. |
+| Ganti `-d bin` dan `-cp bin` menjadi `-d hasil` dan `-cp hasil` | Berjalan normal. Nama folder bebas, asalkan sama di kedua perintah. |
+
+### Mengapa `bin` terpisah dari `src`, dan tidak di-commit ke Git
+
+- Source dan hasil compile tidak bercampur. Tanpa `-d`, `javac` menaruh `.class` di sebelah `.java` (lihat bagian 8), dan folder `src` menjadi berantakan.
+- `bin` selalu bisa dibuat ulang dari `src`, jadi aman dihapus kapan saja.
+- Karena itu `bin/` dan `*.class` ada di `.gitignore` repo ini. Yang disimpan di GitHub hanya `src`. Siapa pun yang meng-clone repo menjalankan `javac` sendiri.
+
+### Nama lain yang sering ditemui
+
+`bin` dipakai oleh Eclipse dan VS Code. IntelliJ IDEA biasanya memakai `out`, Maven memakai `target/classes`, Gradle memakai `build/classes`. Fungsinya sama, hanya nama foldernya berbeda. Pada panduan ini dipakai `bin` karena sama dengan `.gitignore` repo.
+
 ## 1. Tiga aturan dasar
 
 1. **Package sama dengan folder.** Baris `package id.rosyidalansorri.util;` mengharuskan berkas berada di `.../id/rosyidalansorri/util/`. Titik pada nama package menjadi pemisah folder.
